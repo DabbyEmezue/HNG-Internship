@@ -1,14 +1,15 @@
 const dotenv = require("dotenv");
 dotenv.config();
-
+const bookController = require("./controllers/bookController");
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const router = require("./routes/index");
+// const router = require("./routes/index");
 
 const app = express();
+router = express.Router();
 
 app.use(cors());
 app.use(cookieParser());
@@ -18,11 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-//app.use('/api/v1', router);
 
-router.router("/").get(bookController.getBook).post(bookController.addBook);
+app.use("/api/v1", router);
 
-///////////////////////////////////////////
+router.route("/home").get(bookController.getBooks).post(bookController.addBook); ////////////////////////
 
 app.get("/", (req, res) => {
   return res.status(200).json({
